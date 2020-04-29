@@ -85,7 +85,7 @@ class DHT22Property(Property):
     def __init__(self, device, name, description, pin):
         Property.__init__(self, device, name, description)
         self.pin = pin
-        self.set_cached_value(value)
+        self.set_cached_value(0)
 
     def update(self, value):
         print(time.ctime(),'Value of', self.name, 'sensor on pin', self.pin, 'has changed from', self.value,'to', value, flush=True)
