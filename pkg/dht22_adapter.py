@@ -82,7 +82,7 @@ class DHT22Device(Device):
 
 
 class DHT22Property(Property):
-    def __init__(self, device, name, description, pin, value):
+    def __init__(self, device, name, description, pin):
         Property.__init__(self, device, name, description)
         self.pin = pin
         self.set_cached_value(value)
