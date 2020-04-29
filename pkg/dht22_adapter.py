@@ -78,6 +78,7 @@ class DHT22Device(Device):
         # Polling Thread
         while True:
             time.sleep(_POLL_INTERVAL)
+            self.i=self.i+1
             self.properties['temp'].update(self.i+1)
 
 
