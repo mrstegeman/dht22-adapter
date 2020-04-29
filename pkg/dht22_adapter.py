@@ -61,7 +61,7 @@ class DHT22Device(Device):
         self.sensor_type = Adafruit_DHT.DHT22
         self.pin = _pin
         self.temperature_offset = config['temperature_offset']
-        self.humidity_offset = config['humidity_offset']
+        #self.humidity_offset = config['humidity_offset']
         
         humidity, temperature = Adafruit_DHT.read_retry(self.sensor_type, self.pin)
         self.properties['temp'] = DHT22Property( self,
@@ -69,15 +69,15 @@ class DHT22Device(Device):
                                             {
                                                 #'@type': 'temperature',
                                                 'title': 'Temperature',
-                                                'type': 'number',
-                                                'readOnly': True,
-                                                'unit': '°C',
+                                                'type': 'number'
+                                                #'readOnly': True,
+                                                #'unit': '°C',
                                             },
                                             self.pin,
-                                            temperature
+                                            temperature,
                                             )        
 
-        self.properties['humid'] = DHT22Property( self,
+        '''self.properties['humid'] = DHT22Property( self,
                                             'humidity',
                                             {
                                                 #'@type': 'humidity',
@@ -88,7 +88,7 @@ class DHT22Device(Device):
                                             },
                                              self.pin,
                                              humidity
-                                            )
+                                            )'''
 
         t = threading.Thread(target=self.poll)
         t.daemon = True
@@ -99,7 +99,7 @@ class DHT22Device(Device):
         while True:
             time.sleep(_POLL_INTERVAL)
             humidity, temperature = Adafruit_DHT.read_retry(self.sensor_type, self.pin)
-            self.properties['humid'].update(humidity+self.humidity_offset)
+            #self.properties['humid'].update(humidity+self.humidity_offset)
             self.properties['temp'].update(temperature+self.temperature_offset)
 
 
@@ -108,7 +108,7 @@ class DHT22Property(Property):
         Property.__init__(self, device, name, description)
         self.pin = pin
         self.set_cached_value(value)
-        self.device.notify_property_changed(self)
+        #self.device.notify_property_changed(self)
 
     def update(self, value):
         if value != self.value:
