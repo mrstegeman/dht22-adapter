@@ -108,6 +108,7 @@ class DHT22Property(Property):
         Property.__init__(self, device, name, description)
         self.pin = pin
         self.set_cached_value(value)
+        self.device.notify_property_changed(self)
 
     def update(self, value):
         if value != self.value:
@@ -115,7 +116,7 @@ class DHT22Property(Property):
             print(time.ctime(),'Value of', self.name, 'sensor on pin', self.pin, 'has changed from', self.value,'to', value, flush=True)
             #self.set_cached_value_and_notify(value)
             self.set_cached_value(value)
-            #self.device.notify_property_changed(self)
+            self.device.notify_property_changed(self)
 
 
  
