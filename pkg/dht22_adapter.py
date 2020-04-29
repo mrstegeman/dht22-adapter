@@ -67,7 +67,7 @@ class DHT22Device(Device):
                                             'temperature',
                                             {
                                                 'title': 'Temperature',
-                                                'type': 'number'
+                                                'type': 'number',
                                                 'readOnly': True,
                                                 'unit': '°C'
                                             },
