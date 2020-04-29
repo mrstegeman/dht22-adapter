@@ -1,4 +1,3 @@
-import Adafruit_DHT
 import threading
 from gateway_addon import Device,Adapter,Property,Database,Event
 import time
@@ -58,21 +57,17 @@ class DHT22Device(Device):
     """ One DHT22 Sensor """
     def __init__(self, adapter, _pin, config):
         Device.__init__(self, adapter, _pin)
-        self.sensor_type = Adafruit_DHT.DHT22
         self.pin = _pin
-        self.temperature_offset = config['temperature_offset']
+        self.i = 0
         
-        humidity, temperature = Adafruit_DHT.read_retry(self.sensor_type, self.pin)
         self.properties['temp'] = DHT22Property( self,
                                             'temperature',
                                             {
                                                 'title': 'Temperature',
                                                 'type': 'number',
-                                                'readOnly': True,
                                                 'unit': '°C'
                                             },
                                             self.pin,
-                                            temperature,
                                             )        
 
         t = threading.Thread(target=self.poll)
@@ -82,10 +77,8 @@ class DHT22Device(Device):
     def poll(self):
         # Polling Thread
         while True:
-            print('thread')
             time.sleep(_POLL_INTERVAL)
-            humidity, temperature = Adafruit_DHT.read_retry(self.sensor_type, self.pin)
-            self.properties['temp'].update(temperature+self.temperature_offset)
+            self.properties['temp'].update(self.i+1)
 
 
 class DHT22Property(Property):
@@ -95,10 +88,9 @@ class DHT22Property(Property):
         self.set_cached_value(value)
 
     def update(self, value):
-        if value != self.value:
-            print(time.ctime(),'Value of', self.name, 'sensor on pin', self.pin, 'has changed from', self.value,'to', value, flush=True)
-            self.set_cached_value(value)
-            self.device.notify_property_changed(self)
+        print(time.ctime(),'Value of', self.name, 'sensor on pin', self.pin, 'has changed from', self.value,'to', value, flush=True)
+        self.set_cached_value(value)
+        self.device.notify_property_changed(self)
 
 
  
